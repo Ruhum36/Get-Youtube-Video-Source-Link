@@ -1,0 +1,39 @@
+*{
+	font-family: arial;
+	font-size: 14px;
+}
+
+a{
+	color: #666;
+	font-weight: bold;
+	margin: 3px;
+}
+
+.Duzen{
+	width: 852px; margin: auto; border: 1px solid #ddd; border-radius: 5px; padding: 5px 0px; margin-bottom: 50px;
+}
+
+.GenelBilgiler{
+	width: 842px; border-bottom: 1px solid #ddd; height: 30px; padding: 5px;
+}
+.Bilgiler{
+	width: 320px; float: left; padding: 5px; color: #474747; text-align: center; border-right: 1px solid #ddd;
+}
+.Temizle{
+	clear: both;
+}
+.Bold{
+	font-weight: bold;
+}
+.KanalAdi{
+	width: 435px; text-align: left;
+}
+.SonDiv{
+	border-right: none;
+}
+#TwitterProfileUrl{
+	width: 810px; margin: 10px; float: left; height: 250px; padding: 10px;
+}
+#KontrolEt{
+	width: 832px; margin: auto 10px; float: left; padding: 10px; border: 1px dashed #bababa; background-color: #f1f1f1; border-radius: 5px;
+}
