@@ -3,76 +3,76 @@
 	// Ruhum
 	// 23.12.2017
 	
-	function Kalitesi($iTag){
+	function Qualitys($iTag){
 
 		switch ($iTag) {
 			case 5:
-				$Mesaj = 'Flv (400x240)';
+				$Message = 'Flv (400x240)';
 				break;
 			
 			case 6:
-				$Mesaj = 'Flv (450x270)';
+				$Message = 'Flv (450x270)';
 				break;
 			
 			case 13:
-				$Mesaj = '3gp';
+				$Message = '3gp';
 				break;
 			
 			case 17:
-				$Mesaj = '3gp (176x144)';
+				$Message = '3gp (176x144)';
 				break;
 			
 			case 18:
-				$Mesaj = 'Mp4 (640x360)';
+				$Message = 'Mp4 (640x360)';
 				break;
 			
 			case 22:
-				$Mesaj = 'HD - Mp4 (1280x720)';
+				$Message = 'HD - Mp4 (1280x720)';
 				break;
 			
 			case 34:
-				$Mesaj = '360p Flv - 640x360';
+				$Message = '360p Flv - 640x360';
 				break;
 			
 			case 35:
-				$Mesaj = '480p Flv - 854x480';
+				$Message = '480p Flv - 854x480';
 				break;
 			
 			case 36:
-				$Mesaj = '3gp - 320x240';
+				$Message = '3gp - 320x240';
 				break;
 			
 			case 37:
-				$Mesaj = 'HD 1080p - Mp4 (1920x1080)';
+				$Message = 'HD 1080p - Mp4 (1920x1080)';
 				break;
 			
 			case 38:
-				$Mesaj = 'HD 3072p - Mp4 (4096x3072)';
+				$Message = 'HD 3072p - Mp4 (4096x3072)';
 				break;
 			
 			case 43:
-				$Mesaj = '360p - Webm (640x360)';
+				$Message = '360p - Webm (640x360)';
 				break;
 			
 			case 44:
-				$Mesaj = '480p - Webm (854x480)';
+				$Message = '480p - Webm (854x480)';
 				break;
 			
 			case 45:
-				$Mesaj = '720p - Webm (1280x720)';
+				$Message = '720p - Webm (1280x720)';
 				break;
 			
 			case 46:
-				$Mesaj = '1080p - Webm (1920x1080)';
+				$Message = '1080p - Webm (1920x1080)';
 				break;
 			
 			default:
-				$Mesaj = 'Bulunamadı';
+				$Message = 'Bulunamadı';
 				break;
 
 		}
 
-		return $Mesaj;
+		return $Message;
 
 	}
 
@@ -82,30 +82,30 @@
 		$YtVideoID = end($YtVideoID);
 		$YtVideoID = substr($YtVideoID, 0, 11);
 
-		$Baglantilar = array();
-		$Baslik = '';
-		$Kaynak = file_get_contents('http://www.youtube.com/get_video_info?&video_id='.$YtVideoID.'&hl=tr');
-		parse_str($Kaynak,$Sonuclar);
-
-		$Baslik = $Sonuclar['title'];
-		$Sonuclar['url_encoded_fmt_stream_map'] = isset($Sonuclar['url_encoded_fmt_stream_map'])?$Sonuclar['url_encoded_fmt_stream_map']:false;
+		$Links = array();
+		$Title = '';
+		$Source = file_get_contents('http://www.youtube.com/get_video_info?&video_id='.$YtVideoID.'&hl=tr');
+		parse_str($Source,$Results);
 		
-		if($Sonuclar['url_encoded_fmt_stream_map']){
+		$Title = $Results['title'];
+		$Results['url_encoded_fmt_stream_map'] = isset($Results['url_encoded_fmt_stream_map'])?$Results['url_encoded_fmt_stream_map']:false;
+		
+		if($Results['url_encoded_fmt_stream_map']){
 
-			$UrlBilgiler = explode(',',$Sonuclar['url_encoded_fmt_stream_map']);
+			$UrlInformation = explode(',',$Results['url_encoded_fmt_stream_map']);
 
-			foreach($UrlBilgiler as $Bilgi){
+			foreach($UrlInformation as $Bilgi){
 
-				parse_str($Bilgi,$VideoBilgileri);
+				parse_str($Bilgi,$VideoInformation);
 
-				$VideoUrl = urldecode($VideoBilgileri['url']);
-				$Baglantilar[] = '<a href="'.$VideoUrl.'">'.Kalitesi($VideoBilgileri['itag']).'</a>';
+				$VideoUrl = urldecode($VideoInformation['url']);
+				$Links[] = '<a href="'.$VideoUrl.'">'.Qualitys($VideoInformation['itag']).'</a>';
 
 			}
 
 		}
 
-		return array($Baslik, $Baglantilar);
+		return array($Title, $Links);
 
 	}
 
@@ -141,24 +141,24 @@
 		$ProfilBaglantilari = array_map('trim', $ProfilBaglantilari);
 		foreach ($ProfilBaglantilari as $Key => $Baglanti) {
 
-			$KaynakUrl = '';
-			$Sonuclar = GetVideoSourceUrl($Baglanti);
-			$Baslik = $Sonuclar[0];
-			$KaynakUrller = $Sonuclar[1];
-			foreach ($KaynakUrller as $key => $Sonuc) {
+			$SourceUrl = '';
+			$Results = GetVideoSourceUrl($Baglanti);
+			$Title = $Results[0];
+			$SourceUrller = $Results[1];
+			foreach ($SourceUrller as $key => $Sonuc) {
 
-				$KaynakUrl .= $Sonuc.', ';
+				$SourceUrl .= $Sonuc.', ';
 
 			}
 
-			$KaynakUrl = trim($KaynakUrl, ', ');
+			$SourceUrl = trim($SourceUrl, ', ');
 
 ?>
 
 			<div class="GenelBilgiler" <?=$Key%2?'':'style="background-color: #eff7ff;"'?>>
 				<div class="Bilgiler" style="width: 40px;"><?=($Key+1)?></div>
-				<div class="Bilgiler KanalAdi"><a href="<?=$Baglanti?>" target="_blank"><?=$Baslik?></a></div>
-				<div class="Bilgiler SonDiv" style="padding: 0px 5px;"><?=$KaynakUrl?></div>
+				<div class="Bilgiler KanalAdi"><a href="<?=$Baglanti?>" target="_blank"><?=$Title?></a></div>
+				<div class="Bilgiler SonDiv" style="padding: 0px 5px;"><?=$SourceUrl?></div>
 				<div class="Temizle"></div>
 			</div>
 
